@@ -1,0 +1,69 @@
+<%- include('partials/header') %>
+
+<div class="glass" style="padding: 3rem; border-radius: 16px;">
+  <div class="detail-container">
+    <div class="detail-info">
+      <div class="detail-header">
+        <span class="badge badge-<%= titulo.tipo %>" style="margin-bottom: 1rem; display: inline-block;">
+          <%= titulo.tipo %>
+        </span>
+        <h1 class="detail-title"><%= titulo.nombre %></h1>
+        
+        <div class="detail-meta">
+          <span><i data-lucide="calendar"></i> <%= titulo.anio %></span>
+          <% if (titulo.genero) { %>
+            <span><i data-lucide="tag"></i> <%= titulo.genero.nombre %></span>
+          <% } %>
+          <% if (titulo.director) { %>
+            <span><i data-lucide="user"></i> <%= titulo.director %></span>
+          <% } %>
+          <% if (titulo.duracion) { %>
+            <span>
+              <i data-lucide="clock"></i> 
+              <%= titulo.duracion %> <%= titulo.tipo === 'pelicula' ? 'minutos' : 'episodios' %>
+            </span>
+          <% } %>
+          <% if (titulo.puntuacion) { %>
+            <span class="score" style="color: #fbbf24;">
+              <i data-lucide="star" style="fill: currentColor"></i> <%= titulo.puntuacion %>/10
+            </span>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="detail-description">
+        <h3>Descripción</h3>
+        <p style="margin-top: 1rem;"><%= titulo.descripcion || 'No hay descripción disponible para este título.' %></p>
+      </div>
+
+      <div class="detail-actions">
+        <a href="/editar/<%= titulo.id %>" class="btn btn-primary">
+          <i data-lucide="edit"></i> Editar
+        </a>
+        <button onclick="eliminarTitulo(<%= titulo.id %>)" class="btn btn-danger">
+          <i data-lucide="trash-2"></i> Eliminar
+        </button>
+        <a href="/" class="btn btn-secondary">
+          <i data-lucide="arrow-left"></i> Volver
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  async function eliminarTitulo(id) {
+    if (confirm('¿Estás seguro de que deseas eliminar este título?')) {
+      try {
+        await axios.delete(`/api/titulos/${id}`);
+        window.location.href = '/';
+      } catch (error) {
+        alert('Error al eliminar el título');
+        console.error(error);
+      }
+    }
+  }
+</script>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,85 @@
+<%- include('partials/header') %>
+
+<div class="filters-section glass">
+  <form action="/" method="GET" class="filter-group" style="width: 100%;">
+    <select name="tipo" class="form-control">
+      <option value="">Todos los tipos</option>
+      <option value="pelicula" <%= filtros.tipo === 'pelicula' ? 'selected' : '' %>>Película</option>
+      <option value="serie" <%= filtros.tipo === 'serie' ? 'selected' : '' %>>Serie</option>
+    </select>
+    
+    <select name="genero" class="form-control">
+      <option value="">Todos los géneros</option>
+      <% generos.forEach(g => { %>
+        <option value="<%= g.nombre %>" <%= filtros.genero === g.nombre ? 'selected' : '' %>><%= g.nombre %></option>
+      <% }) %>
+    </select>
+    
+    <button type="submit" class="btn btn-primary">
+      <i data-lucide="filter"></i> Filtrar
+    </button>
+    <a href="/" class="btn btn-secondary">Limpiar</a>
+  </form>
+</div>
+
+<div class="grid-container">
+  <% if (titulos.length === 0) { %>
+    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-muted);">
+      <i data-lucide="search-x" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;"></i>
+      <h3>No se encontraron resultados</h3>
+      <p>Intenta con otros filtros o agrega un nuevo título.</p>
+    </div>
+  <% } %>
+
+  <% titulos.forEach(titulo => { %>
+    <div class="card glass">
+      <div class="card-header">
+        <h3 class="card-title"><%= titulo.nombre %></h3>
+        <span class="badge badge-<%= titulo.tipo %>"><%= titulo.tipo %></span>
+      </div>
+      
+      <div class="card-body">
+        <div class="card-meta">
+          <span><i data-lucide="calendar"></i> <%= titulo.anio %></span>
+          <% if (titulo.genero) { %>
+            <span><i data-lucide="tag"></i> <%= titulo.genero.nombre %></span>
+          <% } %>
+        </div>
+        
+        <p class="card-text">
+          <%= titulo.descripcion ? titulo.descripcion : 'Sin descripción disponible.' %>
+        </p>
+      </div>
+      
+      <div class="card-footer">
+        <% if (titulo.puntuacion) { %>
+          <div class="score">
+            <i data-lucide="star" style="fill: currentColor"></i>
+            <%= titulo.puntuacion %>
+          </div>
+        <% } else { %>
+          <div class="score" style="color: var(--text-muted)">
+            <i data-lucide="star"></i> -
+          </div>
+        <% } %>
+        
+        <a href="/detalle/<%= titulo.id %>" class="btn btn-secondary" style="padding: 0.5rem 1rem;">
+          Ver detalles <i data-lucide="arrow-right" style="width: 16px;"></i>
+        </a>
+      </div>
+    </div>
+  <% }) %>
+</div>
+
+<% if (totalPages > 1) { %>
+  <div class="pagination">
+    <% for(let i = 1; i <= totalPages; i++) { %>
+      <a href="/?page=<%= i %><%= filtros.tipo ? '&tipo=' + filtros.tipo : '' %><%= filtros.genero ? '&genero=' + filtros.genero : '' %>" 
+         class="page-item <%= currentPage == i ? 'active' : '' %>">
+        <%= i %>
+      </a>
+    <% } %>
+  </div>
+<% } %>
+
+<%- include('partials/footer') %>
