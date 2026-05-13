@@ -66,6 +66,4 @@ http://localhost:3000
 
 ## Enlace de la aplicación desplegada
 
-🔗 [Ver aplicación en Render](https://movieapi.onrender.com)
-
-> _Actualiza este enlace con la URL real una vez desplegado._
+🔗 [Ver aplicación en Render](https://movieapi-nunq.onrender.com)
